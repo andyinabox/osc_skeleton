@@ -92,7 +92,49 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
+    cout << "key pressed: " << key << endl;
+    ofxOscMessage m;
+    m.setAddress("/key/pressed");
+    m.addIntArg(key);
+    sendMessage(m);
+    
 
+    
+    // the key is a note
+    if(96 < key && key < 104) {
+        
+        cout << "note is a key!" << endl;
+        
+        int midiNote;
+        bool noteIsSet;
+        ofxOscMessage noteMessage;
+
+        noteMessage.setAddress("/key/note");
+        noteIsSet = false;
+        
+        switch(key) {
+            // a
+            case 97: midiNote = 69; noteIsSet = true; break;
+            // b
+            case 98: midiNote = 71; noteIsSet = true; break;
+            // c
+            case 99: midiNote = 60; noteIsSet = true; break;
+            // d
+            case 100: midiNote = 62; noteIsSet = true; break;
+            // e
+            case 101: midiNote = 64; noteIsSet = true; break;
+            // f
+            case 102: midiNote = 65; noteIsSet = true; break;
+            // g
+            case 103: midiNote = 67; noteIsSet = true; break;
+        }
+        
+        if(noteIsSet) {
+            cout << "sending MIDI value " << midiNote << endl;
+            noteMessage.addIntArg(midiNote);
+            sendMessage(noteMessage);
+        }
+    }
 }
 
 //--------------------------------------------------------------
@@ -118,6 +160,7 @@ void ofApp::mousePressed(int x, int y, int button){
     m.addIntArg(x);
     m.addIntArg(y);
     sendMessage(m);
+
 }
 
 //--------------------------------------------------------------
